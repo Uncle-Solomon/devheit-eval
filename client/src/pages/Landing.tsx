@@ -22,7 +22,7 @@ const Landing = () => {
               speed={10}
             />
           </p>
-          <div className="flex justify-between w-[50%] mx-auto">
+          <div className="flex justify-between w-full md:w-[75%] mx-auto">
             <button className="bg-[#000800] border-none text-sm md:text-lg lg:text-xl text-white rounded-lg p-4 uppercase cursor-pointer shadow-md mt-5 shadow-white/15 hover:scale-105 font-medium">
               <Link to="/signup"> Sign Up </Link>
             </button>
