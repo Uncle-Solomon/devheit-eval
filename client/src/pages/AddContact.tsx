@@ -23,7 +23,7 @@ const AddContact = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        // body: JSON.stringify(),
+        body: JSON.stringify(contacts),
       });
 
       if (response.ok) {
