@@ -1,8 +1,44 @@
+import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Signup = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:4000/api/v1/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log("Signup successful");
+      } else {
+        const data = await response.json();
+        console.error("Signup failed:", data.message);
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+    }
+  };
+
+  const handleChange = (e: any) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
-    <div className="flex justify-center items-center h-screen ">
+    <div className="flex justify-center items-center h-screen">
       <div className="w-[50%]">
         <h1 className="text-4xl md:text-5xl lg:text-6xl text-center font-bold leading-20 uppercase mt-4 text-[#001100] cursor-pointer">
           <Link to="/"> Contaxt </Link>
@@ -11,14 +47,16 @@ const Signup = () => {
           ...a little manager for all your contacts
         </p>
 
-        <form onSubmit={() => {}} className="">
+        <form onSubmit={handleSubmit} className="">
           <div className="w-[90%] mx-auto my-2">
-            <label className=" text-lg font-semibold block text-[#001100]">
+            <label className="text-lg font-semibold block text-[#001100]">
               UserName:
             </label>
             <input
               type="text"
-              name="firstname"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
               required
               className="border border-1 border-gray-300 p-2 my-3 w-full rounded-md shadow-sm shadow-gray-300 outline-none"
               placeholder="E.g John"
@@ -26,12 +64,14 @@ const Signup = () => {
           </div>
 
           <div className="w-[90%] mx-auto my-2">
-            <label className=" text-lg font-semibold block text-[#001100]">
+            <label className="text-lg font-semibold block text-[#001100]">
               Password:
             </label>
             <input
               type="password"
-              name="lastname"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               required
               className="border border-1 border-gray-300 p-2 my-3 w-full rounded-md shadow-sm shadow-gray-300 outline-none"
               placeholder="E.g mySpecialPassword123"
@@ -41,7 +81,7 @@ const Signup = () => {
           <div className="w-[90%] mx-auto my-4">
             <button
               type="submit"
-              className="font-bold border border-1 border-gray-500 shadow-md shadow-gray-500 p-3 rounded-lg bg-[#001100] text-white cursor-pointer "
+              className="font-bold border border-1 border-gray-500 shadow-md shadow-gray-500 p-3 rounded-lg bg-[#001100] text-white cursor-pointer"
             >
               Signup
             </button>
