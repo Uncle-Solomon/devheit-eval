@@ -1,11 +1,11 @@
 import { FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+  const navigate = useNavigate();
+  const [username, setusername] = useState<string>("");
+  const [password, setpassword] = useState<string>("");
+  const [error, seterror] = useState<string>("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -16,25 +16,22 @@ const Signup = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ username, password }),
       });
 
-      if (response.ok) {
-        console.log("Signup successful");
+      console.log(response);
+      const data = await response.json();
+
+      if (data.success === true) {
+        // console.log("Signup successful");
+        navigate("/login");
       } else {
-        const data = await response.json();
-        console.error("Signup failed:", data.message);
+        // console.error("Signup failed:", data.message);
+        seterror(data.message);
       }
     } catch (error) {
       console.error("Error during signup:", error);
     }
-  };
-
-  const handleChange = (e: any) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
   };
 
   return (
@@ -46,6 +43,11 @@ const Signup = () => {
         <p className="text-xs md:sm lg:text-base text-center mt-1 mb-12 italic text-[#001100]">
           ...a little manager for all your contacts
         </p>
+        {error && (
+          <p className="text-red-950 text-xs text-center my-4 p-2 bg-red-50">
+            {error}
+          </p>
+        )}
 
         <form onSubmit={handleSubmit} className="">
           <div className="w-[90%] mx-auto my-2">
@@ -55,8 +57,10 @@ const Signup = () => {
             <input
               type="text"
               name="username"
-              value={formData.username}
-              onChange={handleChange}
+              value={username}
+              onChange={(e) => {
+                setusername(e.target.value);
+              }}
               required
               className="border border-1 border-gray-300 p-2 my-3 w-full rounded-md shadow-sm shadow-gray-300 outline-none"
               placeholder="E.g John"
@@ -70,8 +74,10 @@ const Signup = () => {
             <input
               type="password"
               name="password"
-              value={formData.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => {
+                setpassword(e.target.value);
+              }}
               required
               className="border border-1 border-gray-300 p-2 my-3 w-full rounded-md shadow-sm shadow-gray-300 outline-none"
               placeholder="E.g mySpecialPassword123"

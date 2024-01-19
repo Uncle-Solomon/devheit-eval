@@ -9,44 +9,44 @@ export const signup = async (req: Request, res: Response) => {
     res
       .status(422)
       .json({ success: false, message: "Please enter all required fields" });
-  }
-
-  const userExists = await User.findOne({ username });
-
-  if (userExists) {
-    res.status(422).json({
-      success: false,
-      message: "user with username already exists",
-    });
   } else {
-    const user = new User({
-      username,
-      password,
-    });
-    try {
-      password = await hashfunction(password);
+    const userExists = await User.findOne({ username });
 
+    if (userExists) {
+      res.status(422).json({
+        success: false,
+        message: "User with username already exists, try again",
+      });
+    } else {
+      const user = new User({
+        username,
+        password,
+      });
       try {
-        const response = await user.save();
+        user.password = await hashfunction(password);
 
-        res.status(200).json({
-          success: true,
-          data: response,
-          message: "User successfully created",
-        });
-      } catch (saveError) {
+        try {
+          const response = await user.save();
+
+          res.status(200).json({
+            success: true,
+            data: response,
+            message: "User successfully created",
+          });
+        } catch (saveError) {
+          res.status(500).json({
+            success: false,
+            message: "User signup failed",
+            error: saveError,
+          });
+        }
+      } catch (hashError) {
         res.status(500).json({
           success: false,
-          message: "User signup failed",
-          error: saveError,
+          message: "Password hashing failed",
+          error: hashError,
         });
       }
-    } catch (hashError) {
-      res.status(500).json({
-        success: false,
-        message: "Password hashing failed",
-        error: hashError,
-      });
     }
   }
 };

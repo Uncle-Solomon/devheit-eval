@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import { Contact } from "../../models/Contact";
 
+const multer = require("multer");
+const storage = multer.memoryStorage(); // or diskStorage if you want to save files to disk
+const upload = multer({ storage });
+
 export const createContact = async (req: Request, res: Response) => {
   let { firstName, lastName, phoneNumber, user } = req.body;
 
@@ -12,10 +16,10 @@ export const createContact = async (req: Request, res: Response) => {
       message: "You have already added this contact",
     });
   }
-
+  console.log(req.file.buffer);
   let photo = {
-    filename: req.file.filename,
-    path: req.file.path,
+    filename: "req.file.filename",
+    path: "req.file.path",
   };
 
   let viewCount = 0;

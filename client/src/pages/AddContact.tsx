@@ -1,29 +1,26 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 
-import { Contact } from "../utils/type";
 import { useNavigate } from "react-router-dom";
 
 const AddContact = () => {
   const navigate = useNavigate();
-  const [contacts, setContacts] = useState<Contact[]>([]);
-
-  useEffect(() => {
-    fetch("/api/contacts")
-      .then((response) => response.json())
-      .then((data) => setContacts(data))
-      .catch((error) => console.error("Error fetching contacts:", error));
-  }, []);
+  const [firstName, setfirstName] = useState<string>("");
+  const [lastName, setlastName] = useState<string>("");
+  const [phoneNumber, setphoneNumber] = useState<string>("");
+  const [photo, setphoto] = useState<File | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    let user = "65aa3d0ace2d9f04428b18f6";
+
     try {
-      const response = await fetch("url", {
+      const response = await fetch("http://localhost:4000/api/v1/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(contacts),
+        body: JSON.stringify({ firstName, lastName, phoneNumber, photo, user }),
       });
 
       if (response.ok) {
@@ -46,6 +43,10 @@ const AddContact = () => {
           <input
             type="text"
             name="firstname"
+            value={firstName}
+            onChange={(e) => {
+              setfirstName(e.target.value);
+            }}
             required
             className="border border-1 border-gray-300 p-2 my-3 w-full rounded-md shadow-sm shadow-gray-300 outline-none"
             placeholder="E.g John"
@@ -57,6 +58,10 @@ const AddContact = () => {
           <input
             type="text"
             name="lastname"
+            value={lastName}
+            onChange={(e) => {
+              setlastName(e.target.value);
+            }}
             required
             className="border border-1 border-gray-300 p-2 my-3 w-full rounded-md shadow-sm shadow-gray-300 outline-none"
             placeholder="E.g Doe"
@@ -68,6 +73,10 @@ const AddContact = () => {
           <input
             type="text"
             name="phoneNumber"
+            value={phoneNumber}
+            onChange={(e) => {
+              setphoneNumber(e.target.value);
+            }}
             required
             className="border border-1 border-gray-300 p-2 my-3 w-full rounded-md shadow-sm shadow-gray-300 outline-none"
             placeholder="E.g +2348012345678"
@@ -76,7 +85,16 @@ const AddContact = () => {
         <div className="w-[90%] mx-auto my-8">
           <label className=" p-3 bg-gray-500 rounded-md  cursor-pointer border border-1 border-gray-500 text-white  ">
             Upload Photo
-            <input type="file" accept="image/*" required className="hidden" />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0] || null;
+                setphoto(file);
+              }}
+              required
+              className="hidden"
+            />
           </label>
         </div>
 
@@ -96,19 +114,6 @@ const AddContact = () => {
           Back
         </p>
       </form>
-      {/* <ul>
-        {contacts.map((contact) => (
-          // <li key={contact._id}>
-          //   <img src={contact.photo} alt={contact.name} />
-          //   <p>{contact.name}</p>
-          //   <p>Views: {contact.viewCount}</p>
-          //   <button
-          //   >
-          //     View Contact
-          //   </button>
-          // </li>
-        ))}
-      </ul> */}
     </div>
   );
 };

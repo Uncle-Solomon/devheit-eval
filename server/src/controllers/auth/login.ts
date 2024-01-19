@@ -10,29 +10,29 @@ export const login = async (req: Request, res: Response) => {
       success: false,
       message: "Please enter all required fields",
     });
-  }
-
-  User.findOne({ username }).then((user) => {
-    if (!user) {
-      res.status(404).json({
-        success: false,
-        message: "user with that username does not exist",
-      });
-    } else {
-      bcrypt.compare(password, user.password).then((isMatch) => {
-        if (!isMatch) {
-          return res.status(400).json({
-            success: false,
-            message: "Password enetered is incorrect",
-          });
-        }
-
-        res.status(200).json({
-          success: true,
-          message: "User login successful",
-          data: user._id,
+  } else {
+    User.findOne({ username }).then((user) => {
+      if (!user) {
+        res.status(404).json({
+          success: false,
+          message: "User with that username does not exist",
         });
-      });
-    }
-  });
+      } else {
+        bcrypt.compare(password, user.password).then((isMatch) => {
+          if (!isMatch) {
+            return res.status(400).json({
+              success: false,
+              message: "Password entered is incorrect, try again",
+            });
+          } else {
+            res.status(200).json({
+              success: true,
+              message: "User login successful",
+              data: user._id,
+            });
+          }
+        });
+      }
+    });
+  }
 };
