@@ -8,7 +8,7 @@ This project consists of a server and a client. Follow the steps below to set up
 
 1. **Clone the repository:**
    ```bash
-   git clone <url>
+   git clone <[url](https://github.com/Uncle-Solomon/devheit-eval.git)>
 
 2. **Navigate to the server directory:**
    ```bash
