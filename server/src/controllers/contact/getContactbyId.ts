@@ -2,13 +2,11 @@ import { Request, Response } from "express";
 import { Contact } from "../../models/Contact";
 
 export const getContactbyId = async (req: Request, res: Response) => {
-  let { user } = req.body;
-
   const { id } = req.params;
 
   try {
-    const contact = await Contact.findOne({ user, _id: id });
-    contact.viewCount = contact.viewCount + 1;
+    const contact = await Contact.findOne({ _id: id });
+    contact.viewCount = contact.viewCount + 0.5;
 
     await contact
       .save()

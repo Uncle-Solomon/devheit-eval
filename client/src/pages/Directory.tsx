@@ -2,29 +2,37 @@ import { useNavigate } from "react-router-dom";
 import { Contact } from "../utils/type";
 import { Link } from "react-router-dom";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AppContext } from "../AppContext";
 
-type Props = {
-  authenticated: boolean;
-};
+const Directory = () => {
+  const { authenticated, setAuthenticated, setUser, user } = useContext(
+    AppContext
+  ) || {
+    authenticated: false,
+    user: "",
+  };
 
-const Directory = ({ authenticated }: Props) => {
   const navigate = useNavigate();
 
   const [contactsData, setContactsData] = useState<Contact[] | null>(null);
 
-  const fetchData = async (): Promise<void> => {
+  const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/v1/contact");
+      const response = await fetch("http://localhost:4000/api/v1/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user }),
+      });
       const data = await response.json();
 
-      if (Array.isArray(data)) {
-        setContactsData(data);
-      } else {
-        console.error("Data is not an array:", data);
-      }
+      setContactsData(data.data);
+
+      // console.log(contactsData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      // console.error("Error fetching data:", error);
     }
   };
 
@@ -59,7 +67,7 @@ const Directory = ({ authenticated }: Props) => {
                       </p>
                     </div>
                     <img
-                      src={contact.photo}
+                      src={`http://localhost:4000/api/v1/uploads/${contact.photo?.filename}`}
                       alt={`${contact.firstName} ${contact.lastName}`}
                       className="w-20 h-20 object-cover rounded-full"
                     />
@@ -76,7 +84,10 @@ const Directory = ({ authenticated }: Props) => {
 
           <p
             className="font-bold border border-1 border-gray-500 shadow-md shadow-gray-500 p-3 rounded-lg bg-[#110000e7] text-white cursor-pointer mt-4 text-center w-[20%] mx-auto hover:scale-105 transition-all duration-500 my-6"
-            onClick={() => navigate("/")}
+            onClick={() => {
+              setAuthenticated(false);
+              setUser("");
+            }}
           >
             Logout
           </p>

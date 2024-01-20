@@ -7,9 +7,9 @@ export const connectDB = (url: string) => {
       // useNewUrlParser: true, // This is no longer needed in newer versions of Mongoose
     })
     .then(() => {
-      console.log("Database connected successfully");
+      // console.log("Database connected successfully");
     })
     .catch((error) => {
-      console.error(error);
+      // console.error(error);
     });
 };

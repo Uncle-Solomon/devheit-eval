@@ -1,26 +1,26 @@
 import { Request, Response } from "express";
+import fs from "fs";
 import { Contact } from "../../models/Contact";
-
-const multer = require("multer");
-const storage = multer.memoryStorage(); // or diskStorage if you want to save files to disk
-const upload = multer({ storage });
 
 export const createContact = async (req: Request, res: Response) => {
   let { firstName, lastName, phoneNumber, user } = req.body;
 
-  const contactexists = await Contact.findOne({ phoneNumber });
+  const contactExists = await Contact.findOne({ phoneNumber, user });
 
-  if (contactexists) {
-    res.status(422).json({
+  let photo = {
+    filename: req.file.filename,
+    path: req.file.path.replace(/\\/g, "/"), // Replace backslashes with forward slashes
+  };
+
+  if (contactExists) {
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    return res.status(422).json({
       success: false,
       message: "You have already added this contact",
     });
   }
-  console.log(req.file.buffer);
-  let photo = {
-    filename: "req.file.filename",
-    path: "req.file.path",
-  };
 
   let viewCount = 0;
 
@@ -33,14 +33,19 @@ export const createContact = async (req: Request, res: Response) => {
     user,
   });
 
+  // console.log(contact);
   try {
     await contact.save();
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "New Contact succcessfully created",
+      message: "New Contact successfully created",
     });
   } catch (saveError) {
-    res.status(500).json({
+    // console.error("Error creating contact:", saveError);
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    return res.status(500).json({
       success: false,
       message: "Contact creation failed",
       error: saveError,

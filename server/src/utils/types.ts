@@ -9,7 +9,7 @@ export interface ContactType {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  photo?: {
+  photo: {
     filename: string;
     path: string;
   };

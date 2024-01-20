@@ -1,11 +1,17 @@
-import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState, FormEvent } from "react";
+import { AppContext } from "../AppContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const [username, setusername] = useState<string>("");
   const [password, setpassword] = useState<string>("");
   const [error, seterror] = useState<string>("");
+
+  const { setAuthenticated, setUser } = useContext(AppContext) || {
+    setAuthenticated: () => {},
+    setUser: () => {},
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -19,18 +25,21 @@ const Login = () => {
         body: JSON.stringify({ username, password }),
       });
 
-      console.log(response);
+      // console.log(response);
       const data = await response.json();
 
       if (data.success === true) {
-        console.log("Login successful");
+        // console.log("Login successful");
+        setAuthenticated(true);
+        setUser(data.data);
         navigate("/directory");
       } else {
-        console.error("Login failed:", data.message);
+        // console.error("Login failed:", data.message);
+        setAuthenticated(false);
         seterror(data.message);
       }
     } catch (error: any) {
-      // console.error("Error during login:", error);
+      // // console.error("Error during login:", error);
       seterror(error);
     }
   };

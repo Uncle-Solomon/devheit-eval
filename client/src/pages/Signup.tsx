@@ -19,18 +19,18 @@ const Signup = () => {
         body: JSON.stringify({ username, password }),
       });
 
-      console.log(response);
+      // console.log(response);
       const data = await response.json();
 
       if (data.success === true) {
-        // console.log("Signup successful");
+        // // console.log("Signup successful");
         navigate("/login");
       } else {
-        // console.error("Signup failed:", data.message);
+        // // console.error("Signup failed:", data.message);
         seterror(data.message);
       }
     } catch (error) {
-      console.error("Error during signup:", error);
+      // console.error("Error during signup:", error);
     }
   };
 

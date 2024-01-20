@@ -18,7 +18,7 @@ const contactSchema = new mongoose.Schema<ContactType>(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, collection: "dev-heit-eval.contacts" }
 );
 
 export const Contact = mongoose.model<ContactType>("Contact", contactSchema);

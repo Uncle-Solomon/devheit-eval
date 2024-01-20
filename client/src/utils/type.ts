@@ -3,6 +3,9 @@ export interface Contact {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  photo: string;
+  photo?: {
+    filename: string;
+    path: string;
+  };
   viewCount: number;
 }
