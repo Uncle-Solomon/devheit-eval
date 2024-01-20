@@ -1,6 +1,5 @@
-# devheit-eval
-markdown
-Copy code
+## devheit-eval
+
 # DevHeit Evaluation Project
 
 This project consists of a server and a client. Follow the steps below to set up and run the application.
@@ -10,9 +9,8 @@ This project consists of a server and a client. Follow the steps below to set up
 1. **Clone the repository:**
    ```bash
    git clone <url>
-Navigate to the server directory:
 
-2. **Start the Server:**
+2. **Navigate to the server directory:**
    ```bash
    cd server
 
