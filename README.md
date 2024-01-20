@@ -12,40 +12,47 @@ This project consists of a server and a client. Follow the steps below to set up
    git clone <url>
 Navigate to the server directory:
 
-2. ** Start the Server **
-cd server
-Install dependencies:
+2. **Start the Server:**
+   ```bash
+   cd server
 
-3. Install Required Dependencies
-npm install
-Create a .env file in the server directory and set the following environment variables:
+4. **Install Required Dependencies:**
+   ```bash
+   npm install
 
-PORT=<your-preferred-port>
-MONGODB_URL=<your-mongodb-url>'
+5. **Create a .env file in the server directory and set the following environment variables:**
+   ```bash
 
-4. Run the server:
+   PORT=<your-preferred-port>
+   MONGODB_URL=<your-mongodb-url>'
 
-npm run dev
+4. **Run the server:**
+   ```bash
 
-OR
+   npm run dev
 
-npm build && npm start
+   OR
+
+   npm build && npm start
 
 
 ## Client Setup
-1. Open a new terminal.
 
-2. Navigate to the client directory:
+1. **Open a new terminal.**
 
-cd client
+2. **Navigate to the client directory:**
+   ```bash
+   cd client
 
-3. Install client dependencies:
+3. **Install client dependencies:**
+   ```bash
 
-npm install
+   npm install
 
-4. Run the client:
-5. 
-npm run dev
+4. **Run the client:**
+   ```bash
+   npm run dev
+
 Now you should have both the server and client running. Access the application through the specified port in your browser.
 
 Enjoy exploring the DevHeit Evaluation project!
